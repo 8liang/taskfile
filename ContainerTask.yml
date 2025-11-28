@@ -1,0 +1,64 @@
+version: '3'
+tasks:
+  cci:apply:
+    internal: true
+    desc: Upgrade the project in huawei cci
+    silent: true
+    dir: "{{ .CHART_DIR}}"
+    cmds:
+      - |
+        helm template -f {{.VALUE_FILE}} {{.RELEASE}} . \
+        --set image.repository={{.REPOSITORY}} \
+        --set image.tag={{.VERSION}} \
+        {{.EXTRA_ARGS}} \
+        | kubectl apply --context {{.KUBE_CTX}} --namespace {{.NAMESPACE}} -f  -
+
+  cci:delete:
+    internal: true
+    desc: Delete the project in huawei cci
+    silent: true
+    dir: "{{ .CHART_DIR}}"
+    cmds:
+      - |
+        helm template -f {{.VALUE_FILE}} {{.RELEASE}} . \
+        | kubectl delete --context {{.KUBE_CTX}} --namespace {{.NAMESPACE}} -f -
+
+  k8s:upgrade:
+    internal: true
+    desc: Upgrade helm release
+    silent: true
+    dir: "{{.CHART_DIR}}"
+    cmds:
+      - |
+        helm upgrade {{.RELEASE}} . \
+        -f {{.VALUE_FILE}} \
+        --kube-context {{.KUBE_CTX}} \
+        --namespace  {{.NAMESPACE}} \
+        --set image.tag={{.VERSION}} \
+        --set image.repository={{.REPOSITORY}} \
+        {{.EXTRA_ARGS}}
+
+  k8s:delete:
+    internal: true
+    desc: Delete helm release
+    silent: true
+    cmds:
+      - |
+        helm uninstall {{.RELEASE}} \
+        --kube-context {{.KUBE_CTX}} \
+        --namespace  {{.NAMESPACE}}
+
+  k8s:install:
+    internal: true
+    desc: Install and helm
+    silent: true
+    dir: "{{.CHART_DIR}}"
+    cmds:
+      - |
+        helm install {{.RELEASE}} . \
+        -f {{.VALUE_FILE}} \
+        --kube-context {{.KUBE_CTX}} \
+        --namespace  {{.NAMESPACE}} \
+        --set image.tag={{.VERSION}} \
+        --set image.repository={{.REPOSITORY}} \
+        {{.EXTRA_ARGS}}
