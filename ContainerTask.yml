@@ -70,12 +70,12 @@ tasks:
     dir: "{{.WORK_DIR}}"
     env:
       BUILD_VERSION: "{{.BUILD_VERSION}}"
-      KO_IMAGE_REPO: "{{.KO_IMAGE_REPO}}"
+      KO_DOCKER_REPO: "{{.KO_DOCKER_REPO}}"
     vars:
-      LATEST_KO_IMAGE: "{{.KO_IMAGE_REPO}}:latest"
-      VERSION_KO_IMAGE: "{{.KO_IMAGE_REPO}}:{{.VERSION}}"
+      LATEST_KO_IMAGE: "{{.KO_DOCKER_REPO}}:latest"
+      VERSION_KO_IMAGE: "{{.KO_DOCKER_REPO}}:{{.VERSION}}"
     cmds:
-      - echo "Building:${KO_IMAGE_REPO}"
+      - echo "Building:${KO_DOCKER_REPO}"
       - echo "Version:{{.VERSION}}"
       - echo "Latest image tag:{{.LATEST_KO_IMAGE}}"
       - ko build --bare {{.BUILD_PATH}}
