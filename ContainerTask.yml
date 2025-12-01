@@ -62,3 +62,26 @@ tasks:
         --set image.tag={{.VERSION}} \
         --set image.repository={{.REPOSITORY}} \
         {{.EXTRA_ARGS}}
+
+  image:build:
+    desc: Build the project
+    silent: true
+    internal: true
+    dir: "{{.WORK_DIR}}"
+    env:
+      BUILD_VERSION: "{{.BUILD_VERSION}}"
+      KO_IMAGE_REPO: "{{.KO_IMAGE_REPO}}"
+    vars:
+      LATEST_KO_IMAGE: "{{.KO_IMAGE_REPO}}:latest"
+      VERSION_KO_IMAGE: "{{.KO_IMAGE_REPO}}:{{.VERSION}}"
+    cmds:
+      - echo "Building:${KO_IMAGE_REPO}"
+      - echo "Version:{{.VERSION}}"
+      - echo "Latest image tag:{{.LATEST_KO_IMAGE}}"
+      - ko build --bare {{.BUILD_PATH}}
+      - docker tag {{.LATEST_KO_IMAGE}} {{.VERSION_KO_IMAGE}}
+      - echo "✅ Build complete."
+      - echo "🟢 Images tagged as:"
+      - echo "  - {{.LATEST_KO_IMAGE}}"
+      - echo "  - {{.VERSION_KO_IMAGE}}"
+
