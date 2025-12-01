@@ -85,3 +85,10 @@ tasks:
       - echo "  - {{.LATEST_KO_IMAGE}}"
       - echo "  - {{.VERSION_KO_IMAGE}}"
 
+  image:push:
+    desc: Push local image to the registry
+    silent: true
+    internal: true
+    cmds:
+      - docker tag {{.LOCAL_IMAGE_TAG}} {{.REMOTE_TAG}}
+      - docker push {{.REMOTE_TAG}}
