@@ -1,5 +1,17 @@
 version: '3'
 tasks:
+  helm:template:
+    internal: true
+    desc: Template the helm chart
+    silent: true
+    dir: "{{.CHART_DIR}}"
+    cmds:
+      - |
+        helm template -f {{.VALUE_FILE}} {{.RELEASE}} . \
+        --set image.repository={{.REPOSITORY}} \
+        --set image.tag={{.VERSION}} \
+        {{.EXTRA_ARGS}}
+
   cci:apply:
     internal: true
     desc: Upgrade the project in huawei cci
