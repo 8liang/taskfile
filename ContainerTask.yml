@@ -110,9 +110,6 @@ tasks:
     cmds:
       - |
         docker images {{.IMAGE}} --format '{{"{{.Tag}}"}}' \
-        | awk -F'[v.]' '
-          NF == 5 { printf "%d %d %d %d %s\n", $2, $3, $4, $5, $0 }
-        ' \
-        | sort -n -k1 -k2 -k3 -k4 \
-        | tail -n1 \
-        | awk '{print $5}'
+        | grep -E '^[v]?[0-9]+(\.[0-9]+){1,3}([+-].*)?$' \
+        | gsort -V \
+        | tail -n1
